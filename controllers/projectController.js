@@ -93,6 +93,11 @@ function updateProject(id, name, description, startDate, endDate, status, teamMe
     return null;
 }
 
+function esFechaValida(fecha) {
+    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+    return regex.test(fecha);
+  }
+
 // Exportar las funciones del controlador para su uso en otras partes de la aplicación
 module.exports = {
     getAllProjects,
@@ -100,4 +105,5 @@ module.exports = {
     deleteProject,
     getProject,
     updateProject,
+    esFechaValida,
 };

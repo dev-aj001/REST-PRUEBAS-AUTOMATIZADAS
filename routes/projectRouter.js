@@ -1,5 +1,6 @@
 const express = require('express');
 const projectController = require('../controllers/projectController');
+const { esFechaValida } = require('../controllers/projectController');
 
 // Crear una instancia del enrutador de Express
 const router = express.Router();
@@ -59,9 +60,18 @@ router.post('/', function(req, res){
         count++;
         messageObject['message '+count] = 'name parameter required';
     }
-    if(!Date.parse(startDate) || !Date.parse(startDate)){
+
+    if(!esFechaValida(startDate) || !esFechaValida(endDate)){
         count++;
-        messageObject['message '+count] = 'bad date format';
+        messageObject['message '+count] = 'invalid date format';
+    }else{
+        const fecha1 = new Date(startDate);
+        const fecha2 = new Date(endDate);
+
+        if(fecha1>fecha2){
+            count++;
+            messageObject['message '+count] = 'The end date must not be earlier than the start date.';
+        }
     }
      
     if(statusFormated !== 'pendiente' && statusFormated !== 'en progreso' && statusFormated !== 'completado'){
@@ -127,9 +137,18 @@ router.put('/:id', function(req, res){
         count++;
         messageObject['message '+count] = 'name parameter required';
     }
-    if(!Date.parse(startDate) || !Date.parse(startDate)){
+    
+    if(!esFechaValida(startDate) || !esFechaValida(endDate)){
         count++;
-        messageObject['message '+count] = 'bad date format';
+        messageObject['message '+count] = 'invalid date format';
+    }else{
+        const fecha1 = new Date(startDate);
+        const fecha2 = new Date(endDate);
+
+        if(fecha1>fecha2){
+            count++;
+            messageObject['message '+count] = 'The end date must not be earlier than the start date.';
+        }
     }
      
     if(statusFormated !== 'pendiente' && statusFormated !== 'en progreso' && statusFormated !== 'completado'){
