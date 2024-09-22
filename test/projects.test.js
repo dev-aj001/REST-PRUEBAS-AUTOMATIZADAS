@@ -72,6 +72,7 @@ describe('PUT /projects/:id',() => {
     
         // Proyecto actualizando todos los atributos
         const data = {
+            id: 1,
             name: 'proyecto modificado',
             description: 'description modificada',
             startDate: "2024-09-02",
@@ -87,16 +88,7 @@ describe('PUT /projects/:id',() => {
         // console.log(res.body);
         expect(res.status).to.equal(200);
         // Se espera que la respuesta tenga el mismo ID
-        expect(res.body.id).to.be.equal(1);
-
-        // Se espera que la respuesta tenga los mismos valores que el proyecto actualizado
-        expect(res.body.name).to.equal(data.name);
-        expect(res.body.description).to.equal(data.description);
-        expect(res.body.startDate).to.equal(data.startDate);
-        expect(res.body.endDate).to.equal(data.endDate);
-        expect(res.body.status).to.equal(data.status);
-        expect(res.body.teamMembers).to.deep.equal(data.teamMembers);
-        expect(res.body.budget).to.equal(data.budget);
+        expect(res.body).to.deep.equal(data);
     });
 
 });
