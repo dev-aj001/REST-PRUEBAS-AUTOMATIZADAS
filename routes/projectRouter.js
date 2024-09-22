@@ -43,15 +43,15 @@ router.get('/:id', function(req, res){
 // Crea una nueva tarea con los datos proporcionados en el cuerpo de la solicitud
 router.post('/', function(req, res){
     // Obtener los datos de la nueva tarea del cuerpo de la solicitud
-    const { title, name, description, startDate, endDate, teamMembers, status, budget } = req.body;
+    const { name, description, startDate, endDate, teamMembers, status, budget } = req.body;
 
+
+    const statusFormated = status.toLowerCase(); 
     // Llamar a la función createProject del controlador para crear la nueva tarea
-    const project = projectController.createProject(title, name, description, startDate, endDate, teamMembers, status, budget);
+    
     // Responder con el código de estado 200 y la nueva tarea en formato JSON
 
-    let messageObject = {
-        code: 400,
-    };
+    let messageObject = {};
 
     let count = 0;
 
@@ -63,8 +63,8 @@ router.post('/', function(req, res){
         count++;
         messageObject['message '+count] = 'bad date format';
     }
-     const statusFormated = status.toLowerCase() 
-    if(statusFormated !== 'pendiente' || statusFormated !== 'en progreso' || statusFormated !== 'completado'){
+     
+    if(statusFormated !== 'pendiente' && statusFormated !== 'en progreso' && statusFormated !== 'completado'){
         count++;
         messageObject['message '+count] = status + ' is not a valid status';
     }
@@ -72,11 +72,14 @@ router.post('/', function(req, res){
         count++;
         messageObject['message '+count] = 'budget value must be positive';
     }
+    const length = Object.keys(messageObject).length
 
-    if(!messageObject){
+    if(length == 0){
+        const project = projectController.createProject(name, description, startDate, endDate, statusFormated, teamMembers, budget);
         res.status(200).json(project);
     }
     else{
+        messageObject.code = 400;
         res.status(400).json(messageObject);
     }
 
@@ -109,18 +112,50 @@ router.put('/:id', function(req, res){
     // Obtener el ID de la tarea desde el parámetro de la URL
     const id = req.params.id;
     // Obtener los datos de la tarea a actualizar del cuerpo de la solicitud
-    const { title, name, description, startDate, endDate, teamMembers, status, budget } = req.body;
+    const { name, description, startDate, endDate, status, teamMembers, budget } = req.body;
+
+    const statusFormated = status.toLowerCase();
 
     // Llamar a la función updateProject del controlador para actualizar la tarea
-    const project = projectController.updateProject(id, title, name, description, startDate, endDate, teamMembers, status, budget);
+    const project = projectController.updateProject(id, name, description, startDate, endDate, status, teamMembers, budget);
 
-    // Verificar si la tarea fue encontrada y actualizada
+    let messageObject = {};
+
+    let count = 0;
+
+    if( !name ){
+        count++;
+        messageObject['message '+count] = 'name parameter required';
+    }
+    if(!Date.parse(startDate) || !Date.parse(startDate)){
+        count++;
+        messageObject['message '+count] = 'bad date format';
+    }
+     
+    if(statusFormated !== 'pendiente' && statusFormated !== 'en progreso' && statusFormated !== 'completado'){
+        count++;
+        messageObject['message '+count] = status + ' is not a valid status';
+    }
+    if(budget < 0){
+        count++;
+        messageObject['message '+count] = 'budget value must be positive';
+    }
+
+
+
+    const length = Object.keys(messageObject).length
+
+    
     if(project){
-        // Responder con el código de estado 200 y la tarea actualizada en formato JSON
-        res.status(200).json(project);
+        if(length == 0){
+            res.status(200).json(project);
+        }
+        else{
+            messageObject.code = 400;
+            res.status(400).json(messageObject);
+        }
     }else{
-        // Responder con el código de estado 404 y un mensaje de "Tarea no encontrada"
-        res.status(404).json({code: 404, message: 'Project not found' });
+        res.status(400).json({code: 404, message: 'Project not found'});
     }
 });
 

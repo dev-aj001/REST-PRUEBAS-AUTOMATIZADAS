@@ -2,11 +2,11 @@ const Project = require('../models/project');
 
 // Lista inicial de tareas (simulando una base de datos en memoria)
 let projects = [
-   new Project(1, 'Proyecro 1', 'Description 01', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Ana Gómez", "Luis Martínez"], 50000),
-   new Project(2, 'Proyecro 2', 'Description 02', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Sofia H", "Luis Martínez"], 50000),
-   new Project(3, 'Proyecro 3', 'Description 03', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Liliana M", "Luis Martínez"], 50000),
-   new Project(4, 'Proyecro 4', 'Description 04', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Rodolfo F", "Luis Martínez"], 50000),
-   new Project(5, 'Proyecro 5', 'Description 05', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Talia L", "Luis Martínez"], 50000),
+   new Project(1, 'Proyecto 1', 'Description 01', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Ana Gómez", "Luis Martínez"], 50000),
+   new Project(2, 'Proyecto 2', 'Description 02', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Sofia H", "Luis Martínez"], 50000),
+   new Project(3, 'Proyecto 3', 'Description 03', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Liliana M", "Luis Martínez"], 50000),
+   new Project(4, 'Proyecto 4', 'Description 04', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Rodolfo F", "Luis Martínez"], 50000),
+   new Project(5, 'Proyecto 5', 'Description 05', "2024-09-01", "2025-02-01", 'En progreso', ["Carlos Pérez", "Talia L", "Luis Martínez"], 50000),
 ];
 
 // Función para obtener todas las tareas
@@ -41,7 +41,6 @@ function createProject(name, description, startDate, endDate, status, teamMember
 
     const newProject = new Project(newID(), name, description, startDate, endDate, status, teamMembers, budget);
 
-
     // Añadir la nueva tarea a la lista de tareas
     projects.push(newProject);
     // Retornar la tarea creada
@@ -73,17 +72,18 @@ function deleteProject(id){
 //   description (String): Nueva descripción de la tarea
 //   completed (Boolean): Nuevo estado de completado de la tarea
 // Retorna la tarea actualizada o null si no se encuentra
-function updateProject(id, name, description, startDate, endDate, teamMembers, status, budget){
+function updateProject(id, name, description, startDate, endDate, status, teamMembers, budget){
     // Encontrar la tarea por ID
     const project = projects.find(t => t.id == id);
+
     if(project){
         // Actualizar los campos de la tarea
         project.name = name || project.name;
         project.description = description || project.description;
         project.startDate = startDate || project.startDate;
         project.endDate = endDate || project.endDate;
-        project.teamMembers = startDate || project.teamMembers;
-        project.status = status || project.status;
+        project.teamMembers = teamMembers || project.teamMembers;
+        project.status = status || project.status; 
         project.budget = budget || project.budget;
 
         // Retornar la tarea actualizada

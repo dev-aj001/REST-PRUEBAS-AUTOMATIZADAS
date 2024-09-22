@@ -1,5 +1,5 @@
 class Project {
-    constructor(id, name, description, startDate = new Date(), endDate = new Date(), status = false, teamMembers = [], budget) {
+    constructor(id, name, description, startDate = new Date(), endDate = new Date(), status, teamMembers = [], budget) {
         this.id = id;
         this.name = name;
         this.description = description;
